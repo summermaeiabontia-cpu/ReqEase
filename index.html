@@ -1,12 +1,231 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ReqEase</title><style>
-:root{--n:#082b52;--b:#1677dc;--l:#eaf4ff;--w:#fff;--g:#168a52;--o:#c77700;--r:#c93636;--m:#667085}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f8fc;color:#17202b}.top{height:68px;background:#fff;border-bottom:1px solid #dbe5ef;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:3}.brand{font-size:25px;font-weight:800;color:var(--n)}.brand span{color:var(--b)}button,input,select{font:inherit}button{cursor:pointer}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:700}.primary{background:var(--b);color:#fff}.outline{background:#fff;border:1px solid #ccd9e6;color:var(--n)}.screen{min-height:calc(100vh - 68px);display:grid;place-items:center;padding:24px}.card{background:#fff;border:1px solid #dbe5ef;border-radius:20px;box-shadow:0 12px 35px #082b5212}.auth{width:min(460px,100%);padding:30px}.auth h1{color:var(--n);margin:0 0 8px}.muted{color:var(--m);line-height:1.5}label{display:block;font-weight:700;font-size:14px;margin:16px 0 6px}input,select{width:100%;padding:12px;border:1px solid #cbd8e5;border-radius:10px;background:#fff}#app{display:none;min-height:calc(100vh - 68px)}.side{width:230px;background:var(--n);color:#fff;padding:22px 14px;position:fixed;top:68px;bottom:0}.side h3{padding:0 10px}.nav{display:grid;gap:7px}.nav button{background:transparent;border:0;color:#dcecff;text-align:left;padding:12px;border-radius:9px}.nav button:hover,.nav .active{background:#174c80;color:#fff}.main{margin-left:230px;padding:28px;max-width:1200px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.head h2{color:var(--n);margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.stat{padding:18px}.stat small{color:var(--m)}.stat b{display:block;font-size:27px;color:var(--n);margin-top:6px}.panel{padding:20px;margin-top:16px}.row{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:14px 0;border-bottom:1px solid #e5edf5}.row:last-child{border-bottom:0}.status{padding:5px 9px;border-radius:99px;font-size:12px;font-weight:700}.approved{background:#e3f6eb;color:var(--g)}.processing{background:#fff1dc;color:var(--o)}.needs{background:#ffe5e5;color:var(--r)}.actions{display:flex;gap:6px;flex-wrap:wrap}.mini{border:0;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:700}.ok{background:#e3f6eb;color:var(--g)}.wait{background:#fff1dc;color:var(--o)}.need{background:#ffe5e5;color:var(--r)}.upload{border:2px dashed #a9c9e8;border-radius:13px;padding:25px;text-align:center;background:#f7fbff}.error{color:var(--r);font-size:13px;margin-top:8px}.note{background:var(--l);padding:12px;border-radius:10px;color:var(--n);font-size:13px;margin-top:12px}.hidden{display:none!important}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid #e5edf5;font-size:13px}th{color:var(--m);font-size:11px}.toast{position:fixed;right:18px;bottom:18px;background:var(--n);color:#fff;padding:12px 15px;border-radius:10px;z-index:10}@media(max-width:760px){.side{width:65px}.side h3{font-size:0}.nav button{font-size:0;text-align:center}.main{margin-left:65px;padding:18px}.grid{grid-template-columns:1fr}.top{padding:0 14px}}
-</style></head><body>
-<header class="top"><div class="brand">Req<span>Ease</span></div><div><select id="language" onchange="language()"><option>English</option><option>Filipino</option></select> <button id="logout" class="btn outline hidden" onclick="logout()">Log out</button></div></header>
-<section id="auth" class="screen"><div class="card auth"><h1 id="title">Welcome to ReqEase</h1><p class="muted" id="intro">Submit school documents online, track their status, and receive updates in one place.</p><div id="roles"><button class="btn primary" style="width:100%" onclick="role('student')">Student Access</button><button class="btn outline" style="width:100%;margin-top:9px" onclick="role('researcher')">Registrar / Researcher Access</button></div><div id="studentEmail" class="hidden"><label>Email address</label><input id="email" type="email" placeholder="you@example.com"><button class="btn primary" style="width:100%;margin-top:16px" onclick="sendCode()">Continue</button><p id="e1" class="error"></p></div><div id="code" class="hidden"><label>Verification code</label><input id="codeInput" maxlength="6" placeholder="6-digit code"><div class="note">Demo code: <b>123456</b>. A real version would send this code by email.</div><button class="btn primary" style="width:100%;margin-top:16px" onclick="verify()">Verify</button><p id="e2" class="error"></p></div><div id="info" class="hidden"><label>Full name</label><input id="name" placeholder="Full name"><label>Grade & Section</label><input id="section" placeholder="Grade 12 - ABM A"><button class="btn primary" style="width:100%;margin-top:16px" onclick="setup()">Open Student Dashboard</button><p id="e3" class="error"></p></div><div id="researcher" class="hidden"><label>Researcher email</label><input id="remail" type="email" placeholder="thereasearchers@gmail.com"><div class="note">Authorized email: <b>thereasearchers@gmail.com</b></div><button class="btn primary" style="width:100%;margin-top:16px" onclick="researcherLogin()">Open Registrar Dashboard</button><p id="e4" class="error"></p></div></div></section>
-<section id="app"><aside class="side"><h3>ReqEase</h3><div id="snav" class="nav"><button class="active" onclick="sp('home',this)">🏠 Dashboard</button><button onclick="sp('submit',this)">📤 Submit Document</button><button onclick="sp('status',this)">🔎 Track Status</button><button onclick="sp('profile',this)">👤 Profile</button></div><div id="rnav" class="nav hidden"><button class="active" onclick="rp('students',this)">👥 Students</button><button onclick="rp('review',this)">📋 Review</button></div></aside><main id="main" class="main"></main></section><div id="toast" class="toast hidden"></div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ReqEase</title>
+<style>
+:root{--n:#082b52;--b:#1677dc;--l:#eaf4ff;--w:#fff;--g:#168a52;--o:#c77700;--r:#c93636;--m:#667085}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f8fc;color:#17202b}.top{height:68px;background:#fff;border-bottom:1px solid #dbe5ef;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:3}.brand{font-size:25px;font-weight:800;color:var(--n)}.brand span{color:var(--b)}button,input,select{font:inherit}button{cursor:pointer}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:700}.primary{background:var(--b);color:#fff}.outline{background:#fff;border:1px solid #ccd9e6;color:var(--n)}.screen{min-height:calc(100vh - 68px);display:grid;place-items:center;padding:24px}.card{background:#fff;border:1px solid #dbe5ef;border-radius:20px;box-shadow:0 12px 35px #082b5212}.auth{width:min(460px,100%);padding:30px}.auth h1{color:var(--n);margin:0 0 8px}.muted{color:var(--m);line-height:1.5}label{display:block;font-weight:700;font-size:14px;margin:16px 0 6px}input,select{width:100%;padding:12px;border:1px solid #cbd8e5;border-radius:10px;background:#fff}#app{display:none;min-height:calc(100vh - 68px)}.side{width:230px;background:var(--n);color:#fff;padding:22px 14px;position:fixed;top:68px;bottom:0}.side h3{padding:0 10px}.nav{display:grid;gap:7px}.nav button{background:transparent;border:0;color:#dcecff;text-align:left;padding:12px;border-radius:9px}.nav button:hover,.nav .active{background:#174c80;color:#fff}.main{margin-left:230px;padding:28px;max-width:1200px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.head h2{color:var(--n);margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.stat{padding:18px}.stat small{color:var(--m)}.stat b{display:block;font-size:27px;color:var(--n);margin-top:6px}.panel{padding:20px;margin-top:16px}.row{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:14px 0;border-bottom:1px solid #e5edf5}.row:last-child{border-bottom:0}.status{padding:5px 9px;border-radius:99px;font-size:12px;font-weight:700}.approved{background:#e3f6eb;color:var(--g)}.processing{background:#fff1dc;color:var(--o)}.needs{background:#ffe5e5;color:var(--r)}.actions{display:flex;gap:6px;flex-wrap:wrap}.mini{border:0;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:700}.ok{background:#e3f6eb;color:var(--g)}.wait{background:#fff1dc;color:var(--o)}.need{background:#ffe5e5;color:var(--r)}.upload{border:2px dashed #a9c9e8;border-radius:13px;padding:25px;text-align:center;background:#f7fbff}.error{color:var(--r);font-size:13px;margin-top:8px}.note{background:var(--l);padding:12px;border-radius:10px;color:var(--n);font-size:13px;margin-top:12px}.hidden{display:none!important}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid #e5edf5;font-size:13px}th{color:var(--m);font-size:11px}.toast{position:fixed;right:18px;bottom:18px;background:var(--n);color:#fff;padding:12px 15px;border-radius:10px;z-index:10}
+@media(max-width:760px){.side{width:65px}.side h3{font-size:0}.nav button{font-size:0;text-align:center}.main{margin-left:65px;padding:18px}.grid{grid-template-columns:1fr}.top{padding:0 14px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Req<span>Ease</span></div>
+  <div>
+    <select id="languageSelect" aria-label="Language"><option value="en">English</option><option value="fil">Filipino</option></select>
+    <button id="logoutBtn" class="btn outline hidden" type="button">Log out</button>
+  </div>
+</header>
+
+<section id="auth" class="screen">
+<div class="card auth">
+  <h1 id="title">Welcome to ReqEase</h1>
+  <p class="muted" id="intro">Submit school documents online, track their status, and receive updates in one place.</p>
+
+  <div id="roles">
+    <button id="studentAccessBtn" class="btn primary" style="width:100%" type="button">Student Access</button>
+    <button id="researcherAccessBtn" class="btn outline" style="width:100%;margin-top:9px" type="button">Registrar / Researcher Access</button>
+  </div>
+
+  <div id="studentEmail" class="hidden">
+    <label for="email">Email address</label><input id="email" type="email" placeholder="you@example.com">
+    <button id="continueBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Continue</button><p id="e1" class="error"></p>
+  </div>
+
+  <div id="code" class="hidden">
+    <label for="codeInput">Verification code</label><input id="codeInput" maxlength="6" inputmode="numeric" placeholder="6-digit code">
+    <div class="note">Demo code: <b>123456</b>. A real version would send this code by email.</div>
+    <button id="verifyBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Verify</button><p id="e2" class="error"></p>
+  </div>
+
+  <div id="info" class="hidden">
+    <label for="name">Full name</label><input id="name" placeholder="Full name">
+    <label for="section">Grade &amp; Section</label><input id="section" placeholder="Grade 12 - ABM A">
+    <button id="openStudentBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Open Student Dashboard</button><p id="e3" class="error"></p>
+  </div>
+
+  <div id="researcher" class="hidden">
+    <label for="remail">Researcher email</label><input id="remail" type="email" placeholder="thereasearchers@gmail.com">
+    <div class="note">Authorized email: <b>thereasearchers@gmail.com</b></div>
+    <button id="openResearcherBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Open Registrar Dashboard</button><p id="e4" class="error"></p>
+  </div>
+</div>
+</section>
+
+<section id="app">
+  <aside class="side">
+    <h3>ReqEase</h3>
+    <div id="snav" class="nav">
+      <button data-page="home" class="active" type="button">🏠 Dashboard</button>
+      <button data-page="submit" type="button">📤 Submit Document</button>
+      <button data-page="status" type="button">🔎 Track Status</button>
+      <button data-page="profile" type="button">👤 Profile</button>
+    </div>
+    <div id="rnav" class="nav hidden">
+      <button data-page="students" class="active" type="button">👥 Students</button>
+      <button data-page="review" type="button">📋 Review</button>
+    </div>
+  </aside>
+  <main id="main" class="main"></main>
+</section>
+<div id="toast" class="toast hidden"></div>
+
 <script>
-const ADMIN='thereasearchers@gmail.com';let mode='',student=null,page='home';let data=JSON.parse(localStorage.reqEaseData||'[]');const $=id=>document.getElementById(id);function save(){localStorage.reqEaseData=JSON.stringify(data);localStorage.reqEaseStudent=JSON.stringify(student)}function clearAuth(){['roles','studentEmail','code','info','researcher'].forEach(x=>$(x).classList.add('hidden'))}function role(x){clearAuth();$(x==='student'?'studentEmail':'researcher').classList.remove('hidden');mode=x}function sendCode(){if(!$('email').value.includes('@'))return $('e1').textContent='Please enter a valid email.';clearAuth();$('code').classList.remove('hidden')}function verify(){if($('codeInput').value!=='123456')return $('e2').textContent='Incorrect code.';clearAuth();$('info').classList.remove('hidden')}function setup(){let n=$('name').value.trim(),s=$('section').value.trim(),e=$('email').value.trim();if(!n||!s)return $('e3').textContent='Please complete all fields.';student=data.find(x=>x.email===e)||{id:Date.now(),name:n,section:s,email:e,docs:[]};student.name=n;student.section=s;if(!data.includes(student))data.push(student);save();open('student');sp('home')}function researcherLogin(){if($('remail').value.trim().toLowerCase()!==ADMIN)return $('e4').textContent='Unauthorized email.';open('researcher');rp('students')}function open(x){mode=x;$('auth').style.display='none';$('app').style.display='block';$('logout').classList.remove('hidden');$('snav').classList.toggle('hidden',x!=='student');$('rnav').classList.toggle('hidden',x!=='researcher')}function logout(){mode='';student=null;$('app').style.display='none';$('auth').style.display='grid';$('logout').classList.add('hidden');clearAuth();$('roles').classList.remove('hidden')}function toast(x){$('toast').textContent=x;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2000)}function esc(x){return String(x).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function sp(p,btn){page=p;if(btn){document.querySelectorAll('#snav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}let d=student?.docs||[];if(p==='home')$('main').innerHTML=`<div class=head><div><h2>Good day, ${esc(student.name)}!</h2><div class=muted>Your ReqEase dashboard</div></div></div><div class=grid><div class="card stat"><small>Total submissions</small><b>${d.length}</b></div><div class="card stat"><small>Processing</small><b>${d.filter(x=>x.status==='Processing').length}</b></div><div class="card stat"><small>Approved</small><b>${d.filter(x=>x.status==='Approved').length}</b></div></div><div class="card panel"><h3>Recent submissions</h3>${d.length?d.slice().reverse().map(doc).join(''):'<p class=muted>No submissions yet.</p>'}</div>`;else if(p==='submit')$('main').innerHTML=`<div class=head><div><h2>Submit a Document</h2><div class=muted>Upload your required school document.</div></div></div><div class="card panel"><label>Document type</label><select id=type><option>Certificate of Enrollment</option><option>Form 137</option><option>Good Moral Certificate</option><option>Report Card</option><option>Other Registrar Document</option></select><label>File</label><div class=upload><input id=file type=file></div><button class="btn primary" style="width:100%;margin-top:16px" onclick=submitDoc()>Submit Document</button></div>`;else if(p==='status')$('main').innerHTML=`<div class=head><div><h2>Track Status</h2><div class=muted>Check the latest status of your requests.</div></div></div><div class="card panel">${d.length?d.slice().reverse().map(doc).join(''):'<p class=muted>No submissions yet.</p>'}</div>`;else $('main').innerHTML=`<div class=head><div><h2>My Profile</h2><div class=muted>Your account information</div></div></div><div class="card panel"><h3>${esc(student.name)}</h3><p>${esc(student.section)}</p><p class=muted>${esc(student.email)}</p></div>`}function doc(x){let c=x.status==='Approved'?'approved':x.status==='Needs Additional File'?'needs':'processing';return `<div class=row><div><b>${esc(x.type)}</b><div class=muted>${esc(x.file)} • ${x.date}</div></div><span class="status ${c}">${x.status}</span></div>`}function submitDoc(){let f=$('file').files[0];if(!f)return toast('Please choose a file.');student.docs.push({id:Date.now(),type:$('type').value,file:f.name,date:new Date().toLocaleDateString(),status:'Processing'});data=data.map(x=>x.id===student.id?student:x);save();toast('Document submitted.');sp('status')}
-function rp(p,btn){page=p;if(btn){document.querySelectorAll('#rnav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}let all=data.flatMap(s=>s.docs.map(d=>({s,d})));if(p==='students')$('main').innerHTML=`<div class=head><div><h2>Registrar / Researcher Dashboard</h2><div class=muted>Review and update student submissions.</div></div></div><div class=grid><div class="card stat"><small>Students</small><b>${data.length}</b></div><div class="card stat"><small>Submissions</small><b>${all.length}</b></div><div class="card stat"><small>To be viewed</small><b>${all.filter(x=>x.d.status==='Processing').length}</b></div></div><div class="card panel"><h3>Student submissions</h3>${all.length?`<table><tr><th>Student</th><th>Section</th><th>Document</th><th>Status</th><th>Action</th></tr>${all.map(x=>`<tr><td>${esc(x.s.name)}</td><td>${esc(x.s.section)}</td><td>${esc(x.d.type)}</td><td><span class=status>${x.d.status}</span></td><td><div class=actions><button class="mini ok" onclick="update(${x.s.id},${x.d.id},'Approved')">Completed</button><button class="mini wait" onclick="update(${x.s.id},${x.d.id},'Processing')">To Be Viewed</button><button class="mini need" onclick="update(${x.s.id},${x.d.id},'Needs Additional File')">Needs File</button></div></td></tr>`).join('')}</table>`:'<p class=muted>No submissions yet. Create one through Student Access.</p>'}</div>`;else $('main').innerHTML=`<div class=head><div><h2>Review Submissions</h2><div class=muted>All registered students appear here.</div></div></div><div class="card panel">${data.length?data.map(s=>`<div class=row><div><b>${esc(s.name)}</b><div class=muted>${esc(s.section)} • ${s.docs.length} document(s)</div></div><button class="btn outline" onclick="rp('students')">Review</button></div>`).join(''):'<p class=muted>No students yet.</p>'}</div>`}function update(sid,did,status){data=data.map(s=>{if(s.id===sid)s.docs=s.docs.map(d=>d.id===did?{...d,status}:d);return s});save();toast('Status updated.');rp('students')}
-function language(){let f=$('language').value==='Filipino';$('title').textContent=f?'Maligayang pagdating sa ReqEase':'Welcome to ReqEase';$('intro').textContent=f?'Mag-submit ng school documents online, tingnan ang status, at makatanggap ng updates sa isang lugar.':'Submit school documents online, track their status, and receive updates in one place.'}
-</script></body></html>
+(function(){
+  'use strict';
+  const ADMIN='thereasearchers@gmail.com';
+  let mode='';
+  let student=null;
+  let data=[];
+
+  try{ data=JSON.parse(localStorage.getItem('reqEaseData')||'[]'); if(!Array.isArray(data)) data=[]; }catch(e){ data=[]; }
+
+  const $=id=>document.getElementById(id);
+  const hide=id=>$(id).classList.add('hidden');
+  const show=id=>$(id).classList.remove('hidden');
+  const clearAuth=()=>['roles','studentEmail','code','info','researcher'].forEach(hide);
+
+  function save(){
+    try{
+      localStorage.setItem('reqEaseData',JSON.stringify(data));
+      if(student) localStorage.setItem('reqEaseStudent',JSON.stringify(student));
+    }catch(e){}
+  }
+
+  function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+
+  function toast(message){
+    $('toast').textContent=message;
+    show('toast');
+    setTimeout(()=>hide('toast'),2200);
+  }
+
+  function selectRole(roleName){
+    clearAuth();
+    show(roleName==='student'?'studentEmail':'researcher');
+    mode=roleName;
+  }
+
+  function sendCode(){
+    const email=$('email').value.trim();
+    $('e1').textContent='';
+    if(!email || !email.includes('@')){$('e1').textContent='Please enter a valid email.';return;}
+    clearAuth(); show('code'); mode='student';
+  }
+
+  function verify(){
+    $('e2').textContent='';
+    if($('codeInput').value.trim()!=='123456'){$('e2').textContent='Incorrect code. Use the demo code 123456.';return;}
+    clearAuth(); show('info');
+  }
+
+  function setupStudent(){
+    $('e3').textContent='';
+    const n=$('name').value.trim(), s=$('section').value.trim(), e=$('email').value.trim();
+    if(!n||!s){$('e3').textContent='Please complete all fields.';return;}
+    let existing=data.find(x=>x.email===e);
+    if(existing){student=existing;student.name=n;student.section=s;}
+    else{student={id:Date.now(),name:n,section:s,email:e,docs:[]};data.push(student);}
+    save(); openApp('student'); renderStudent('home');
+  }
+
+  function researcherLogin(){
+    $('e4').textContent='';
+    if($('remail').value.trim().toLowerCase()!==ADMIN){$('e4').textContent='Unauthorized email.';return;}
+    openApp('researcher'); renderResearcher('students');
+  }
+
+  function openApp(newMode){
+    mode=newMode;
+    hide('auth'); $('app').style.display='block'; show('logoutBtn');
+    $('snav').classList.toggle('hidden',newMode!=='student');
+    $('rnav').classList.toggle('hidden',newMode!=='researcher');
+  }
+
+  function logout(){
+    mode=''; student=null; $('app').style.display='none'; $('auth').style.display='grid'; hide('logoutBtn'); clearAuth(); show('roles');
+    $('email').value=''; $('codeInput').value=''; $('name').value=''; $('section').value=''; $('remail').value='';
+  }
+
+  function setActive(containerId,btn){
+    document.querySelectorAll('#'+containerId+' button').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+  }
+
+  function renderStudent(page,btn){
+    if(btn) setActive('snav',btn);
+    const d=student?.docs||[];
+    if(page==='home'){
+      $('main').innerHTML=`<div class=head><div><h2>Good day, ${esc(student.name)}!</h2><div class=muted>Your ReqEase dashboard</div></div></div><div class=grid><div class="card stat"><small>Total submissions</small><b>${d.length}</b></div><div class="card stat"><small>Processing</small><b>${d.filter(x=>x.status==='Processing').length}</b></div><div class="card stat"><small>Approved</small><b>${d.filter(x=>x.status==='Approved').length}</b></div></div><div class="card panel"><h3>Recent submissions</h3>${d.length?d.slice().reverse().map(docHtml).join(''):'<p class=muted>No submissions yet.</p>'}</div>`;
+    }else if(page==='submit'){
+      $('main').innerHTML=`<div class=head><div><h2>Submit a Document</h2><div class=muted>Upload your required school document.</div></div></div><div class="card panel"><label for="type">Document type</label><select id=type><option>Certificate of Enrollment</option><option>Form 137</option><option>Good Moral Certificate</option><option>Report Card</option><option>Other Registrar Document</option></select><label for=file>File</label><div class=upload><input id=file type=file></div><button id=submitDocBtn class="btn primary" style="width:100%;margin-top:16px" type="button">Submit Document</button></div>`;
+      $('submitDocBtn').addEventListener('click',submitDoc);
+    }else if(page==='status'){
+      $('main').innerHTML=`<div class=head><div><h2>Track Status</h2><div class=muted>Check the latest status of your requests.</div></div></div><div class="card panel">${d.length?d.slice().reverse().map(docHtml).join(''):'<p class=muted>No submissions yet.</p>'}</div>`;
+    }else{
+      $('main').innerHTML=`<div class=head><div><h2>My Profile</h2><div class=muted>Your account information</div></div></div><div class="card panel"><h3>${esc(student.name)}</h3><p>${esc(student.section)}</p><p class=muted>${esc(student.email)}</p></div>`;
+    }
+  }
+
+  function docHtml(x){
+    const c=x.status==='Approved'?'approved':x.status==='Needs Additional File'?'needs':'processing';
+    return `<div class=row><div><b>${esc(x.type)}</b><div class=muted>${esc(x.file)} • ${esc(x.date)}</div></div><span class="status ${c}">${esc(x.status)}</span></div>`;
+  }
+
+  function submitDoc(){
+    const f=$('file')?.files?.[0];
+    if(!f){toast('Please choose a file.');return;}
+    student.docs.push({id:Date.now(),type:$('type').value,file:f.name,date:new Date().toLocaleDateString(),status:'Processing'});
+    data=data.map(x=>x.id===student.id?student:x); save(); toast('Document submitted.'); renderStudent('status');
+  }
+
+  function renderResearcher(page,btn){
+    if(btn) setActive('rnav',btn);
+    const all=data.flatMap(s=>s.docs.map(d=>({s,d})));
+    if(page==='students'){
+      $('main').innerHTML=`<div class=head><div><h2>Registrar / Researcher Dashboard</h2><div class=muted>Review and update student submissions.</div></div></div><div class=grid><div class="card stat"><small>Students</small><b>${data.length}</b></div><div class="card stat"><small>Submissions</small><b>${all.length}</b></div><div class="card stat"><small>To be viewed</small><b>${all.filter(x=>x.d.status==='Processing').length}</b></div></div><div class="card panel"><h3>Student submissions</h3>${all.length?`<table><tr><th>Student</th><th>Section</th><th>Document</th><th>Status</th><th>Action</th></tr>${all.map(x=>`<tr><td>${esc(x.s.name)}</td><td>${esc(x.s.section)}</td><td>${esc(x.d.type)}</td><td><span class="status">${esc(x.d.status)}</span></td><td><div class=actions><button class="mini ok completeBtn" data-sid="${x.s.id}" data-did="${x.d.id}" type="button">Completed</button><button class="mini wait viewBtn" data-sid="${x.s.id}" data-did="${x.d.id}" type="button">To Be Viewed</button><button class="mini need needBtn" data-sid="${x.s.id}" data-did="${x.d.id}" type="button">Needs File</button></div></td></tr>`).join('')}</table>`:'<p class=muted>No submissions yet. Create one through Student Access.</p>'}</div>`;
+      document.querySelectorAll('.completeBtn').forEach(b=>b.addEventListener('click',()=>update(Number(b.dataset.sid),Number(b.dataset.did),'Approved')));
+      document.querySelectorAll('.viewBtn').forEach(b=>b.addEventListener('click',()=>update(Number(b.dataset.sid),Number(b.dataset.did),'Processing')));
+      document.querySelectorAll('.needBtn').forEach(b=>b.addEventListener('click',()=>update(Number(b.dataset.sid),Number(b.dataset.did),'Needs Additional File')));
+    }else{
+      $('main').innerHTML=`<div class=head><div><h2>Review Submissions</h2><div class=muted>All registered students appear here.</div></div></div><div class="card panel">${data.length?data.map(s=>`<div class=row><div><b>${esc(s.name)}</b><div class=muted>${esc(s.section)} • ${s.docs.length} document(s)</div></div><button class="btn outline reviewBtn" data-id="${s.id}" type="button">Review</button></div>`).join(''):'<p class=muted>No students yet.</p>'}</div>`;
+      document.querySelectorAll('.reviewBtn').forEach(b=>b.addEventListener('click',()=>renderResearcher('students')));
+    }
+  }
+
+  function update(sid,did,status){
+    data=data.map(s=>s.id===sid?{...s,docs:s.docs.map(d=>d.id===did?{...d,status}:d)}:s);
+    if(student&&student.id===sid) student=data.find(s=>s.id===sid);
+    save(); toast('Status updated.'); renderResearcher('students');
+  }
+
+  function setLanguage(){
+    const fil=$('languageSelect').value==='fil';
+    $('title').textContent=fil?'Maligayang pagdating sa ReqEase':'Welcome to ReqEase';
+    $('intro').textContent=fil?'Mag-submit ng school documents online, tingnan ang status, at makatanggap ng updates sa isang lugar.':'Submit school documents online, track their status, and receive updates in one place.';
+    $('studentAccessBtn').textContent=fil?'Student Access':'Student Access';
+    $('researcherAccessBtn').textContent=fil?'Registrar / Researcher Access':'Registrar / Researcher Access';
+  }
+
+  $('studentAccessBtn').addEventListener('click',()=>selectRole('student'));
+  $('researcherAccessBtn').addEventListener('click',()=>selectRole('researcher'));
+  $('continueBtn').addEventListener('click',sendCode);
+  $('verifyBtn').addEventListener('click',verify);
+  $('openStudentBtn').addEventListener('click',setupStudent);
+  $('openResearcherBtn').addEventListener('click',researcherLogin);
+  $('logoutBtn').addEventListener('click',logout);
+  $('languageSelect').addEventListener('change',setLanguage);
+
+  document.querySelectorAll('#snav button').forEach(btn=>btn.addEventListener('click',()=>renderStudent(btn.dataset.page,btn)));
+  document.querySelectorAll('#rnav button').forEach(btn=>btn.addEventListener('click',()=>renderResearcher(btn.dataset.page,btn)));
+
+  // Allow Enter key to continue through the login forms.
+  $('email').addEventListener('keydown',e=>{if(e.key==='Enter')sendCode();});
+  $('codeInput').addEventListener('keydown',e=>{if(e.key==='Enter')verify();});
+  $('remail').addEventListener('keydown',e=>{if(e.key==='Enter')researcherLogin();});
+})();
+</script>
+</body>
+</html>
