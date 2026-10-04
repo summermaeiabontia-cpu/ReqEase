@@ -26,7 +26,7 @@
 
   <div id="roles">
     <button id="studentAccessBtn" class="btn primary" style="width:100%" type="button">Student Access</button>
-    <button id="researcherAccessBtn" class="btn outline" style="width:100%;margin-top:9px" type="button">Registrar / Researcher Access</button>
+    <button id="researcherAccessBtn" class="btn outline" style="width:100%;margin-top:9px" type="button">Admin</button>
   </div>
 
   <div id="studentEmail" class="hidden">
@@ -47,7 +47,7 @@
   </div>
 
   <div id="researcher" class="hidden">
-    <label for="remail">Researcher email</label><input id="remail" type="email" placeholder="thereasearchers@gmail.com">
+    <label for="remail">Admin email</label><input id="remail" type="email" placeholder="Enter admin email">
     
     <button id="openResearcherBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Open Registrar Dashboard</button><p id="e4" class="error"></p>
   </div>
@@ -75,7 +75,7 @@
 <script>
 (function(){
   'use strict';
-  const ADMIN='thereasearchers@gmail.com';
+  const ADMIN='Enter admin email';
   let mode='';
   let student=null;
   let data=[];
@@ -206,7 +206,7 @@
     $('title').textContent=fil?'Maligayang pagdating sa ReqEase':'Welcome to ReqEase';
     $('intro').textContent=fil?'Mag-submit ng school documents online, tingnan ang status, at makatanggap ng updates sa isang lugar.':'Submit school documents online, track their status, and receive updates in one place.';
     $('studentAccessBtn').textContent=fil?'Student Access':'Student Access';
-    $('researcherAccessBtn').textContent=fil?'Registrar / Researcher Access':'Registrar / Researcher Access';
+    $('researcherAccessBtn').textContent=fil?'Admin':'Admin';
   }
 
   $('studentAccessBtn').addEventListener('click',()=>selectRole('student'));
