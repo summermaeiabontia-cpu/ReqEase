@@ -1,231 +1,252 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReqEase</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--n:#082b52;--b:#1677dc;--l:#eaf4ff;--w:#fff;--g:#168a52;--o:#c77700;--r:#c93636;--m:#667085}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f8fc;color:#17202b}.top{height:68px;background:#fff;border-bottom:1px solid #dbe5ef;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:3}.brand{font-size:25px;font-weight:800;color:var(--n)}.brand span{color:var(--b)}button,input,select{font:inherit}button{cursor:pointer}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:700}.primary{background:var(--b);color:#fff}.outline{background:#fff;border:1px solid #ccd9e6;color:var(--n)}.screen{min-height:calc(100vh - 68px);display:grid;place-items:center;padding:24px}.card{background:#fff;border:1px solid #dbe5ef;border-radius:20px;box-shadow:0 12px 35px #082b5212}.auth{width:min(460px,100%);padding:30px}.auth h1{color:var(--n);margin:0 0 8px}.muted{color:var(--m);line-height:1.5}label{display:block;font-weight:700;font-size:14px;margin:16px 0 6px}input,select{width:100%;padding:12px;border:1px solid #cbd8e5;border-radius:10px;background:#fff}#app{display:none;min-height:calc(100vh - 68px)}.side{width:230px;background:var(--n);color:#fff;padding:22px 14px;position:fixed;top:68px;bottom:0}.side h3{padding:0 10px}.nav{display:grid;gap:7px}.nav button{background:transparent;border:0;color:#dcecff;text-align:left;padding:12px;border-radius:9px;display:flex;align-items:center;gap:10px;width:100%}.nav-icon{display:inline-flex;width:24px;min-width:24px;justify-content:center;align-items:center;font-size:19px;line-height:1}.nav-label{display:inline-block}.nav button:hover,.nav .active{background:#174c80;color:#fff}.main{margin-left:230px;padding:28px;max-width:1200px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.head h2{color:var(--n);margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.stat{padding:18px}.stat small{color:var(--m)}.stat b{display:block;font-size:27px;color:var(--n);margin-top:6px}.panel{padding:20px;margin-top:16px}.row{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:14px 0;border-bottom:1px solid #e5edf5}.row:last-child{border-bottom:0}.status{padding:5px 9px;border-radius:99px;font-size:12px;font-weight:700}.approved{background:#e3f6eb;color:var(--g)}.processing{background:#fff1dc;color:var(--o)}.needs{background:#ffe5e5;color:var(--r)}.actions{display:flex;gap:6px;flex-wrap:wrap}.mini{border:0;border-radius:8px;padding:7px 9px;font-size:12px;font-weight:700}.ok{background:#e3f6eb;color:var(--g)}.wait{background:#fff1dc;color:var(--o)}.need{background:#ffe5e5;color:var(--r)}.upload{border:2px dashed #a9c9e8;border-radius:13px;padding:25px;text-align:center;background:#f7fbff}.error{color:var(--r);font-size:13px;margin-top:8px}.note{background:var(--l);padding:12px;border-radius:10px;color:var(--n);font-size:13px;margin-top:12px}.hidden{display:none!important}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid #e5edf5;font-size:13px}th{color:var(--m);font-size:11px}.toast{position:fixed;right:18px;bottom:18px;background:var(--n);color:#fff;padding:12px 15px;border-radius:10px;z-index:10}
-@media(max-width:760px){.side{width:72px;padding:22px 8px}.side h3{font-size:0}.nav button{font-size:0;text-align:center;justify-content:center;padding:12px 8px}.nav-label{display:none}.nav-icon{display:inline-flex;font-size:22px;width:32px;min-width:32px}.main{margin-left:72px;padding:18px}.grid{grid-template-columns:1fr}.top{padding:0 14px}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#071426;color:#fff}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.container{max-width:1050px;margin:auto;padding:24px}
+header{padding:20px 24px;background:#0b1d35;border-bottom:1px solid #29405f}
+.logo{font-size:25px;font-weight:800;color:#65b5ff}
+.muted{color:#aebbd0}
+.card{background:#0d213b;border:1px solid #29405f;border-radius:18px;padding:24px;margin:18px 0}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;background:#43a5ff;color:#061425}
+.btn.secondary{background:#183452;color:#fff}
+.btn.danger{background:#d9534f;color:#fff}
+input,select{width:100%;padding:13px 14px;border-radius:11px;border:1px solid #3b5575;background:#071426;color:#fff;margin:7px 0 14px}
+label{display:block;font-weight:700;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.hero{text-align:center;padding:55px 20px}
+.hero h1{font-size:42px;margin:0 0 10px}
+.role-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:25px}
+.role-buttons .btn{min-width:180px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.status{display:inline-block;padding:7px 11px;border-radius:999px;background:#24496f;font-size:13px;font-weight:700}
+.submission{border:1px solid #29405f;border-radius:15px;padding:18px;margin:12px 0;background:#0a1b31}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.small{font-size:13px}
+a{color:#74c0ff}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.hero h1{font-size:34px}.container{padding:16px}}
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="brand">Req<span>Ease</span></div>
-  <div>
-    <select id="languageSelect" aria-label="Language"><option value="en">English</option><option value="fil">Filipino</option></select>
-    <button id="logoutBtn" class="btn outline hidden" type="button">Log out</button>
-  </div>
-</header>
+<header><div class="container" style="padding-top:0;padding-bottom:0"><div class="logo">ReqEase</div><div class="muted small">Online Document Submission System</div></div></header>
 
-<section id="auth" class="screen">
-<div class="card auth">
-  <h1 id="title">Welcome to ReqEase</h1>
-  <p class="muted" id="intro">Submit school documents online, track their status, and receive updates in one place.</p>
-
-  <div id="roles">
-    <button id="studentAccessBtn" class="btn primary" style="width:100%" type="button">Student Access</button>
-    <button id="researcherAccessBtn" class="btn outline" style="width:100%;margin-top:9px" type="button">Registrar / Researcher Access</button>
+<main class="container">
+<section id="home" class="hero">
+  <h1>Welcome to ReqEase</h1>
+  <p class="muted">A convenient way to submit and track document requests online.</p>
+  <div class="role-buttons">
+    <button class="btn" onclick="showStudentLogin()">Student</button>
+    <button class="btn secondary" onclick="showAdminLogin()">Admin</button>
   </div>
-
-  <div id="studentEmail" class="hidden">
-    <label for="email">Email address</label><input id="email" type="email" placeholder="you@example.com">
-    <button id="continueBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Continue</button><p id="e1" class="error"></p>
-  </div>
-
-  <div id="code" class="hidden">
-    <label for="codeInput">Verification code</label><input id="codeInput" maxlength="6" inputmode="numeric" placeholder="6-digit code">
-    
-    <button id="verifyBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Verify</button><p id="e2" class="error"></p>
-  </div>
-
-  <div id="info" class="hidden">
-    <label for="name">Full name</label><input id="name" placeholder="Full name">
-    <label for="section">Grade &amp; Section</label><input id="section" placeholder="Grade 12 - ABM A">
-    <button id="openStudentBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Open Student Dashboard</button><p id="e3" class="error"></p>
-  </div>
-
-  <div id="researcher" class="hidden">
-    <label for="remail">Researcher email</label><input id="remail" type="email" placeholder="thereasearchers@gmail.com">
-    
-    <button id="openResearcherBtn" class="btn primary" style="width:100%;margin-top:16px" type="button">Open Registrar Dashboard</button><p id="e4" class="error"></p>
-  </div>
-</div>
 </section>
 
-<section id="app">
-  <aside class="side">
-    <h3>ReqEase</h3>
-    <div id="snav" class="nav">
-      <button data-page="home" class="active" type="button"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></button>
-      <button data-page="submit" type="button"><span class="nav-icon">📤</span><span class="nav-label">Submit Document</span></button>
-      <button data-page="status" type="button"><span class="nav-icon">🔎</span><span class="nav-label">Track Status</span></button>
-      <button data-page="profile" type="button"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></button>
-    </div>
-    <div id="rnav" class="nav hidden">
-      <button data-page="students" class="active" type="button"><span class="nav-icon">👥</span><span class="nav-label">Students</span></button>
-      <button data-page="review" type="button"><span class="nav-icon">📋</span><span class="nav-label">Review</span></button>
-    </div>
-  </aside>
-  <main id="main" class="main"></main>
+<section id="studentLogin" class="card hidden">
+  <h2>Student Access</h2>
+  <label>Email</label>
+  <input id="studentEmail" type="email" placeholder="Enter your email">
+  <button class="btn" onclick="sendCode()">Continue</button>
+  <button class="btn secondary" onclick="goHome()">Back</button>
+  <div id="studentCodeBox" class="hidden">
+    <p class="muted">Enter the verification code shown for this demo.</p>
+    <input id="studentCode" inputmode="numeric" placeholder="Verification code">
+    <button class="btn" onclick="verifyCode()">Verify</button>
+  </div>
+  <p id="studentLoginMsg" class="small"></p>
 </section>
-<div id="toast" class="toast hidden"></div>
+
+<section id="studentInfo" class="card hidden">
+  <h2>Student Information</h2>
+  <label>Full Name</label><input id="studentName" placeholder="Full name">
+  <label>Section</label><input id="studentSection" placeholder="Section">
+  <button class="btn" onclick="openStudentDashboard()">Continue</button>
+</section>
+
+<section id="studentDash" class="hidden">
+  <div class="card">
+    <h2>Student Dashboard</h2>
+    <p id="studentWelcome" class="muted"></p>
+  </div>
+  <div class="card">
+    <h3>Submit a Document</h3>
+    <label>Document Type</label>
+    <input id="documentType" placeholder="e.g. Certificate of Enrollment">
+    <label>Choose File</label>
+    <input id="documentFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx">
+    <button class="btn" onclick="submitDocument()">Submit Document</button>
+    <p id="uploadMsg" class="small"></p>
+  </div>
+  <div class="card">
+    <h3>My Submissions</h3>
+    <div id="mySubmissions"></div>
+  </div>
+  <button class="btn secondary" onclick="logout()">Log out</button>
+</section>
+
+<section id="adminLogin" class="card hidden">
+  <h2>Admin Access</h2>
+  <label>Admin email</label>
+  <input id="adminEmail" type="email" placeholder="Enter admin email">
+  <button class="btn" onclick="loginAdmin()">Open Admin Dashboard</button>
+  <button class="btn secondary" onclick="goHome()">Back</button>
+  <p id="adminMsg" class="small"></p>
+</section>
+
+<section id="adminDash" class="hidden">
+  <div class="card">
+    <h2>Admin Dashboard</h2>
+    <p class="muted">Review student document submissions and update their status.</p>
+    <button class="btn secondary" onclick="loadAdminSubmissions()">Refresh</button>
+  </div>
+  <div class="card">
+    <h3>Student Submissions</h3>
+    <div id="adminSubmissions">Loading...</div>
+  </div>
+  <button class="btn secondary" onclick="logout()">Log out</button>
+</section>
+</main>
 
 <script>
-(function(){
-  'use strict';
-  const ADMIN='thereasearchers@gmail.com';
-  let mode='';
-  let student=null;
-  let data=[];
+const SUPABASE_URL = "https://wtsvdcauvmarqnuoiid.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_MgwHrKAngDA-wyW5OM5Mqg_rGe5Ojqo";
+const ADMIN_EMAIL = "thereasearchers@gmail.com";
 
-  try{ data=JSON.parse(localStorage.getItem('reqEaseData')||'[]'); if(!Array.isArray(data)) data=[]; }catch(e){ data=[]; }
+/* IMPORTANT:
+   Change this only if your Supabase Storage bucket has a different name. */
+const BUCKET_NAME = "documents";
 
-  const $=id=>document.getElementById(id);
-  const hide=id=>$(id).classList.add('hidden');
-  const show=id=>$(id).classList.remove('hidden');
-  const clearAuth=()=>['roles','studentEmail','code','info','researcher'].forEach(hide);
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+let student = null;
 
-  function save(){
-    try{
-      localStorage.setItem('reqEaseData',JSON.stringify(data));
-      if(student) localStorage.setItem('reqEaseStudent',JSON.stringify(student));
-    }catch(e){}
+function hideAll(){
+  ["home","studentLogin","studentInfo","studentDash","adminLogin","adminDash"]
+    .forEach(id=>document.getElementById(id).classList.add("hidden"));
+}
+function goHome(){hideAll();document.getElementById("home").classList.remove("hidden")}
+function showStudentLogin(){hideAll();document.getElementById("studentLogin").classList.remove("hidden")}
+function showAdminLogin(){hideAll();document.getElementById("adminLogin").classList.remove("hidden")}
+
+function sendCode(){
+  const email=document.getElementById("studentEmail").value.trim();
+  const msg=document.getElementById("studentLoginMsg");
+  if(!email){msg.textContent="Please enter your email.";return}
+  document.getElementById("studentCodeBox").classList.remove("hidden");
+  msg.textContent="For this prototype, enter 123456 as the verification code.";
+}
+function verifyCode(){
+  const code=document.getElementById("studentCode").value.trim();
+  if(code!=="123456"){document.getElementById("studentLoginMsg").textContent="Incorrect code.";return}
+  student={email:document.getElementById("studentEmail").value.trim().toLowerCase()};
+  hideAll();document.getElementById("studentInfo").classList.remove("hidden");
+}
+function openStudentDashboard(){
+  const name=document.getElementById("studentName").value.trim();
+  const section=document.getElementById("studentSection").value.trim();
+  if(!name||!section){alert("Please complete your name and section.");return}
+  student.name=name;student.section=section;
+  hideAll();document.getElementById("studentDash").classList.remove("hidden");
+  document.getElementById("studentWelcome").textContent=`Welcome, ${name} â€” ${section}`;
+  loadMySubmissions();
+}
+function loginAdmin(){
+  const email=document.getElementById("adminEmail").value.trim().toLowerCase();
+  const msg=document.getElementById("adminMsg");
+  if(email!==ADMIN_EMAIL){msg.textContent="Unauthorized email.";return}
+  hideAll();document.getElementById("adminDash").classList.remove("hidden");
+  loadAdminSubmissions();
+}
+
+async function submitDocument(){
+  const msg=document.getElementById("uploadMsg");
+  const file=document.getElementById("documentFile").files[0];
+  const type=document.getElementById("documentType").value.trim();
+  if(!type||!file){msg.textContent="Please choose a document type and file.";return}
+  if(file.size>50*1024*1024){msg.textContent="File is larger than the 50 MB limit.";return}
+
+  msg.textContent="Uploading...";
+  const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const path=`${student.email}/${Date.now()}_${safeName}`;
+
+  const upload=await db.storage.from(BUCKET_NAME).upload(path,file,{upsert:false});
+  if(upload.error){msg.textContent="Upload failed: "+upload.error.message;return}
+
+  const publicData=db.storage.from(BUCKET_NAME).getPublicUrl(path);
+  const row={
+    student_name:student.name,
+    section:student.section,
+    email:student.email,
+    document_type:type,
+    file_path:path,
+    status:"To Be Viewed"
+  };
+  const insert=await db.from("submissions").insert(row);
+  if(insert.error){
+    await db.storage.from(BUCKET_NAME).remove([path]);
+    msg.textContent="Submission failed: "+insert.error.message;
+    return;
   }
+  msg.textContent="Document submitted successfully!";
+  document.getElementById("documentType").value="";
+  document.getElementById("documentFile").value="";
+  loadMySubmissions();
+}
 
-  function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+async function loadMySubmissions(){
+  const box=document.getElementById("mySubmissions");
+  box.textContent="Loading...";
+  if(!student){return}
+  const res=await db.from("submissions").select("*").eq("email",student.email).order("created_at",{ascending:false});
+  if(res.error){box.textContent="Could not load submissions: "+res.error.message;return}
+  if(!res.data.length){box.innerHTML='<p class="muted">No submissions yet.</p>';return}
+  box.innerHTML=res.data.map(s=>submissionHTML(s,false)).join("");
+}
 
-  function toast(message){
-    $('toast').textContent=message;
-    show('toast');
-    setTimeout(()=>hide('toast'),2200);
-  }
+async function loadAdminSubmissions(){
+  const box=document.getElementById("adminSubmissions");
+  box.textContent="Loading...";
+  const res=await db.from("submissions").select("*").order("created_at",{ascending:false});
+  if(res.error){box.textContent="Could not load submissions: "+res.error.message;return}
+  if(!res.data.length){box.innerHTML='<p class="muted">No student submissions yet.</p>';return}
+  box.innerHTML=res.data.map(s=>submissionHTML(s,true)).join("");
+}
 
-  function selectRole(roleName){
-    clearAuth();
-    show(roleName==='student'?'studentEmail':'researcher');
-    mode=roleName;
-  }
+function submissionHTML(s,isAdmin){
+  const url=db.storage.from(BUCKET_NAME).getPublicUrl(s.file_path).data.publicUrl;
+  const date=s.created_at?new Date(s.created_at).toLocaleString():"";
+  const actions=isAdmin?`
+    <div class="actions">
+      <button class="btn" onclick="updateStatus('${s.id}','Completed')">Completed</button>
+      <button class="btn secondary" onclick="updateStatus('${s.id}','To Be Viewed')">To Be Viewed</button>
+      <button class="btn danger" onclick="updateStatus('${s.id}','Needs Additional File')">Needs Additional File</button>
+    </div>`:"";
+  return `<div class="submission">
+    <strong>${escapeHTML(s.student_name||"")}</strong>
+    <div class="muted small">${escapeHTML(s.email||"")} â€¢ ${escapeHTML(s.section||"")}</div>
+    <p><b>Document:</b> ${escapeHTML(s.document_type||"")}</p>
+    <p><b>Status:</b> <span class="status">${escapeHTML(s.status||"To Be Viewed")}</span></p>
+    <p class="small muted">${date}</p>
+    <a href="${url}" target="_blank" rel="noopener">View uploaded document</a>
+    ${actions}
+  </div>`;
+}
+async function updateStatus(id,status){
+  const res=await db.from("submissions").update({status}).eq("id",id);
+  if(res.error){alert("Could not update status: "+res.error.message);return}
+  loadAdminSubmissions();
+}
+function escapeHTML(v){
+  return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+function logout(){student=null;goHome()}
 
-  function sendCode(){
-    const email=$('email').value.trim();
-    $('e1').textContent='';
-    if(!email || !email.includes('@')){$('e1').textContent='Please enter a valid email.';return;}
-    clearAuth(); show('code'); mode='student';
-  }
-
-  function verify(){
-    $('e2').textContent='';
-    if($('codeInput').value.trim()!=='123456'){$('e2').textContent='Incorrect code. Use the demo code 123456.';return;}
-    clearAuth(); show('info');
-  }
-
-  function setupStudent(){
-    $('e3').textContent='';
-    const n=$('name').value.trim(), s=$('section').value.trim(), e=$('email').value.trim();
-    if(!n||!s){$('e3').textContent='Please complete all fields.';return;}
-    let existing=data.find(x=>x.email===e);
-    if(existing){student=existing;student.name=n;student.section=s;}
-    else{student={id:Date.now(),name:n,section:s,email:e,docs:[]};data.push(student);}
-    save(); openApp('student'); renderStudent('home');
-  }
-
-  function researcherLogin(){
-    $('e4').textContent='';
-    if($('remail').value.trim().toLowerCase()!==ADMIN){$('e4').textContent='Unauthorized email.';return;}
-    openApp('researcher'); renderResearcher('students');
-  }
-
-  function openApp(newMode){
-    mode=newMode;
-    hide('auth'); $('app').style.display='block'; show('logoutBtn');
-    $('snav').classList.toggle('hidden',newMode!=='student');
-    $('rnav').classList.toggle('hidden',newMode!=='researcher');
-  }
-
-  function logout(){
-    mode=''; student=null; $('app').style.display='none'; $('auth').style.display='grid'; hide('logoutBtn'); clearAuth(); show('roles');
-    $('email').value=''; $('codeInput').value=''; $('name').value=''; $('section').value=''; $('remail').value='';
-  }
-
-  function setActive(containerId,btn){
-    document.querySelectorAll('#'+containerId+' button').forEach(b=>b.classList.remove('active'));
-    if(btn) btn.classList.add('active');
-  }
-
-  function renderStudent(page,btn){
-    if(btn) setActive('snav',btn);
-    const d=student?.docs||[];
-    if(page==='home'){
-      $('main').innerHTML=`<div class=head><div><h2>Good day, ${esc(student.name)}!</h2><div class=muted>Your ReqEase dashboard</div></div></div><div class=grid><div class="card stat"><small>Total submissions</small><b>${d.length}</b></div><div class="card stat"><small>Processing</small><b>${d.filter(x=>x.status==='Processing').length}</b></div><div class="card stat"><small>Approved</small><b>${d.filter(x=>x.status==='Approved').length}</b></div></div><div class="card panel"><h3>Recent submissions</h3>${d.length?d.slice().reverse().map(docHtml).join(''):'<p class=muted>No submissions yet.</p>'}</div>`;
-    }else if(page==='submit'){
-      $('main').innerHTML=`<div class=head><div><h2>Submit a Document</h2><div class=muted>Upload your required school document.</div></div></div><div class="card panel"><label for="type">Document type</label><select id=type><option>Certificate of Enrollment</option><option>Form 137</option><option>Good Moral Certificate</option><option>Report Card</option><option>Other Registrar Document</option></select><label for=file>File</label><div class=upload><input id=file type=file></div><button id=submitDocBtn class="btn primary" style="width:100%;margin-top:16px" type="button">Submit Document</button></div>`;
-      $('submitDocBtn').addEventListener('click',submitDoc);
-    }else if(page==='status'){
-      $('main').innerHTML=`<div class=head><div><h2>Track Status</h2><div class=muted>Check the latest status of your requests.</div></div></div><div class="card panel">${d.length?d.slice().reverse().map(docHtml).join(''):'<p class=muted>No submissions yet.</p>'}</div>`;
-    }else{
-      $('main').innerHTML=`<div class=head><div><h2>My Profile</h2><div class=muted>Your account information</div></div></div><div class="card panel"><h3>${esc(student.name)}</h3><p>${esc(student.section)}</p><p class=muted>${esc(student.email)}</p></div>`;
-    }
-  }
-
-  function docHtml(x){
-    const c=x.status==='Approved'?'approved':x.status==='Needs Additional File'?'needs':'processing';
-    return `<div class=row><div><b>${esc(x.type)}</b><div class=muted>${esc(x.file)} • ${esc(x.date)}</div></div><span class="status ${c}">${esc(x.status)}</span></div>`;
-  }
-
-  function submitDoc(){
-    const f=$('file')?.files?.[0];
-    if(!f){toast('Please choose a file.');return;}
-    student.docs.push({id:Date.now(),type:$('type').value,file:f.name,date:new Date().toLocaleDateString(),status:'Processing'});
-    data=data.map(x=>x.id===student.id?student:x); save(); toast('Document submitted.'); renderStudent('status');
-  }
-
-  function renderResearcher(page,btn){
-    if(btn) setActive('rnav',btn);
-    const all=data.flatMap(s=>s.docs.map(d=>({s,d})));
-    if(page==='students'){
-      $('main').innerHTML=`<div class=head><div><h2>Registrar / Researcher Dashboard</h2><div class=muted>Review and update student submissions.</div></div></div><div class=grid><div class="card stat"><small>Students</small><b>${data.length}</b></div><div class="card stat"><small>Submissions</small><b>${all.length}</b></div><div class="card stat"><small>To be viewed</small><b>${all.filter(x=>x.d.status==='Processing').length}</b></div></div><div class="card panel"><h3>Student submissions</h3>${all.length?`<table><tr><th>Student</th><th>Section</th><th>Document</th><th>Status</th><th>Action</th></tr>${all.map(x=>`<tr><td>${esc(x.s.name)}</td><td>${esc(x.s.section)}</td><td>${esc(x.d.type)}</td><td><span class="status">${esc(x.d.status)}</span></td><td><div class=actions><button class="mini ok completeBtn" data-sid="${x.s.id}" data-did="${x.d.id}" type="button">Completed</button><button class="mini wait viewBtn" data-sid="${x.s.id}" data-did="${x.d.id}" type="button">To Be Viewed</button><button class="mini need needBtn" data-sid="${x.s.id}" data-did="${x.d.id}" type="button">Needs File</button></div></td></tr>`).join('')}</table>`:'<p class=muted>No submissions yet. Create one through Student Access.</p>'}</div>`;
-      document.querySelectorAll('.completeBtn').forEach(b=>b.addEventListener('click',()=>update(Number(b.dataset.sid),Number(b.dataset.did),'Approved')));
-      document.querySelectorAll('.viewBtn').forEach(b=>b.addEventListener('click',()=>update(Number(b.dataset.sid),Number(b.dataset.did),'Processing')));
-      document.querySelectorAll('.needBtn').forEach(b=>b.addEventListener('click',()=>update(Number(b.dataset.sid),Number(b.dataset.did),'Needs Additional File')));
-    }else{
-      $('main').innerHTML=`<div class=head><div><h2>Review Submissions</h2><div class=muted>All registered students appear here.</div></div></div><div class="card panel">${data.length?data.map(s=>`<div class=row><div><b>${esc(s.name)}</b><div class=muted>${esc(s.section)} • ${s.docs.length} document(s)</div></div><button class="btn outline reviewBtn" data-id="${s.id}" type="button">Review</button></div>`).join(''):'<p class=muted>No students yet.</p>'}</div>`;
-      document.querySelectorAll('.reviewBtn').forEach(b=>b.addEventListener('click',()=>renderResearcher('students')));
-    }
-  }
-
-  function update(sid,did,status){
-    data=data.map(s=>s.id===sid?{...s,docs:s.docs.map(d=>d.id===did?{...d,status}:d)}:s);
-    if(student&&student.id===sid) student=data.find(s=>s.id===sid);
-    save(); toast('Status updated.'); renderResearcher('students');
-  }
-
-  function setLanguage(){
-    const fil=$('languageSelect').value==='fil';
-    $('title').textContent=fil?'Maligayang pagdating sa ReqEase':'Welcome to ReqEase';
-    $('intro').textContent=fil?'Mag-submit ng school documents online, tingnan ang status, at makatanggap ng updates sa isang lugar.':'Submit school documents online, track their status, and receive updates in one place.';
-    $('studentAccessBtn').textContent=fil?'Student Access':'Student Access';
-    $('researcherAccessBtn').textContent=fil?'Registrar / Researcher Access':'Registrar / Researcher Access';
-  }
-
-  $('studentAccessBtn').addEventListener('click',()=>selectRole('student'));
-  $('researcherAccessBtn').addEventListener('click',()=>selectRole('researcher'));
-  $('continueBtn').addEventListener('click',sendCode);
-  $('verifyBtn').addEventListener('click',verify);
-  $('openStudentBtn').addEventListener('click',setupStudent);
-  $('openResearcherBtn').addEventListener('click',researcherLogin);
-  $('logoutBtn').addEventListener('click',logout);
-  $('languageSelect').addEventListener('change',setLanguage);
-
-  document.querySelectorAll('#snav button').forEach(btn=>btn.addEventListener('click',()=>renderStudent(btn.dataset.page,btn)));
-  document.querySelectorAll('#rnav button').forEach(btn=>btn.addEventListener('click',()=>renderResearcher(btn.dataset.page,btn)));
-
-  // Allow Enter key to continue through the login forms.
-  $('email').addEventListener('keydown',e=>{if(e.key==='Enter')sendCode();});
-  $('codeInput').addEventListener('keydown',e=>{if(e.key==='Enter')verify();});
-  $('remail').addEventListener('keydown',e=>{if(e.key==='Enter')researcherLogin();});
-})();
+goHome();
 </script>
 </body>
 </html>
