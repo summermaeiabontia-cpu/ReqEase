@@ -429,19 +429,6 @@ async function submitDocument() {
   msg.textContent = "";
 
   try {
-    const response = await fetch(SUPABASE_URL + "/rest/v1/", {
-      method: "GET",
-      headers: {
-        apikey: SUPABASE_PUBLISHABLE_KEY,
-        Authorization: "Bearer " + SUPABASE_PUBLISHABLE_KEY
-      }
-    });
-
-    if (!response.ok && response.status !== 404) {
-      const body = await response.text().catch(() => "");
-      throw new Error("Supabase API returned HTTP " + response.status + (body ? ": " + body.slice(0, 180) : ""));
-    }
-
     btn.textContent = "Uploading...";
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const path = student.userId + "/" + Date.now() + "_" + safeName;
